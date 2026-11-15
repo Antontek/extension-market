@@ -16,8 +16,7 @@ O Bricks 編輯器「擴充商店」的登記清單和自動打包。做法和 A
 | `action.yml` | 給擴充的 repo 用的檢查（見「在 GitHub 上自動檢查」） |
 | `index` 分支 | 擴充商店的清單 `index.json`、`packages/`、每個擴充的紀錄 `logs/<id>.txt` |
 
-官方的擴充可以當範例：[ext-ultrasonic](https://github.com/Antontek/ext-ultrasonic)（超音波感測器，有 `lib/`）、
-[ext-neopixel](https://github.com/Antontek/ext-neopixel)（LED 燈條）、[ext-mqtt](https://github.com/Antontek/ext-mqtt)（MQTT）。
+範例：[ext-mqtt](https://github.com/Antontek/ext-mqtt)（MQTT）。下面說的檔案它都有：積木、產生程式碼的樣板、四種語言的文字和說明、`lib/`、範例、圖示。
 
 ---
 
@@ -184,6 +183,20 @@ node tools/obricks-market-tools.mjs check ../ext-你的擴充 --market https://r
 ```
 
 `--market` 會和擴充商店上已經有的擴充比對 `lib/` 的檔名，`--verbose` 會印出產生的程式碼。
+
+### 在編輯器裡試用
+
+上架前可以先裝在自己的瀏覽器，接上主機試積木：
+
+1. 把擴充的資料夾壓縮成 zip。最上層是 `extension.json`，或外面多包一層資料夾也可以（例如 GitHub repo 的「Code → Download ZIP」）。
+2. 在 O Bricks 編輯器打開「擴充商店」，按「**安裝自己的擴充**」，選這個 zip。
+3. 裝好之後出現在擴充商店最上面的「自己安裝的」，專案一樣從積木分類列的「＋ 擴充」加入。
+
+- 安裝時會做格式檢查（上面檢查工具的第一部分：名稱前綴、積木清單、文字、產生程式碼的樣板、範例），不通過會列出原因；
+  在每塊開發板建立積木、Python 語法的檢查，要用上面的指令。
+- 改好之後在詳細頁按「重新選檔案」，就會換成新的內容，版本號不用升。
+- 和擴充商店上的擴充同一個 id 時（例如測試自己擴充的新版），會換掉商店的版本；擴充商店那一張的詳細頁可以改回商店的版本。
+- 只裝在這個瀏覽器，沒有經過擴充商店審核。不想上架、只給自己或學校用的擴充，也可以這樣安裝。
 
 ### 在 GitHub 上自動檢查
 

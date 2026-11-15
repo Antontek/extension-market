@@ -1,7 +1,7 @@
 {
   "extensions": [
     { "id": "mqtt", "repo": "Antontek/ext-mqtt" },
-    { "id": "neopixel", "repo": "Antontek/ext-neopixel" },
-    { "id": "ultrasonic", "repo": "Antontek/ext-ultrasonic" }
+    { "id": "neopixel", "repo": "Antontek/ext-neopixel", "disabled": "示範用，不是正式的擴充" },
+    { "id": "ultrasonic", "repo": "Antontek/ext-ultrasonic", "disabled": "示範用，不是正式的擴充" }
   ]
 }
