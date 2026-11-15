@@ -176,10 +176,10 @@ README 缺的語言顯示 `README.md`，其他文字依序改用其他語言。�
 需要 [Node.js](https://nodejs.org/) 22 以上和 git。
 
 ```bash
-git clone https://github.com/Antontek/market.git
-cd market
+git clone https://github.com/Antontek/extension-market.git
+cd extension-market
 npm ci --prefix tools
-node tools/obricks-market-tools.mjs check ../ext-你的擴充 --market https://raw.githubusercontent.com/Antontek/market/index/index.json
+node tools/obricks-market-tools.mjs check ../ext-你的擴充 --market https://raw.githubusercontent.com/Antontek/extension-market/index/index.json
 ```
 
 `--market` 會和擴充商店上已經有的擴充比對 `lib/` 的檔名，`--verbose` 會印出產生的程式碼。
@@ -210,7 +210,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v5
-      - uses: Antontek/market@main
+      - uses: Antontek/extension-market@main
 ```
 
 ---
@@ -247,7 +247,7 @@ id 的規則：
 - 上架的版本**不會再變**：已上架的 tag 被移動或刪除，擴充商店還是原本的內容。要修正就升版本號、打新的 tag
 - 沒通過的 tag 不會重試：改好之後一樣要升版本號、打新的 tag
 
-為什麼沒上架，看 `index` 分支的紀錄：`https://github.com/Antontek/market/blob/index/logs/<id>.txt`
+為什麼沒上架，看 `index` 分支的紀錄：`https://github.com/Antontek/extension-market/blob/index/logs/<id>.txt`
 
 ---
 
