@@ -1,0 +1,15 @@
+{
+  "name": "obricks-market-tools",
+  "private": true,
+  "type": "module",
+  "description": "O Bricks 擴充商店的檢查、打包工具（由 obricks-platform-kit 產生，不要手改）",
+  "dependencies": {
+    "@blockly/field-angle": "13.4.0",
+    "@blockly/field-bitmap": "13.4.0",
+    "@blockly/field-colour": "13.4.0",
+    "@blockly/field-multilineinput": "13.4.0",
+    "@blockly/field-slider": "13.4.0",
+    "@pybricks/mpy-cross-v6": "2.0.0",
+    "blockly": "13.3.0"
+  }
+}

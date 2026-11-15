@@ -1,0 +1,25 @@
+# 檢查登記的 PR：registry.json 的格式、新登記的擴充（抓最新的 tag 用 tools/ 檢查）。
+# 結果在 PR 的「Checks」頁。通過也不會自動合併：第一次登記要維護的人看過內容再合併。
+# 第一次發 PR 的人，GitHub 要維護的人按「Approve and run」才會跑（公開 repo 的預設）
+name: 檢查登記
+on:
+  pull_request:
+    paths: [registry.json]
+permissions:
+  contents: read
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 24
+      - run: npm ci --prefix tools --no-audit --no-fund
+      - name: 讀目前的擴充商店（index 分支）
+        run: |
+          if git fetch --depth 1 origin index; then git worktree add --detach current FETCH_HEAD; else mkdir current; fi
+      - name: 檢查
+        run: node scripts/check-registry.mjs --base-ref "origin/${{ github.base_ref }}" --index current --summary "$GITHUB_STEP_SUMMARY"

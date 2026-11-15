@@ -1,0 +1,7 @@
+{
+  "extensions": [
+    { "id": "mqtt", "repo": "Antontek/ext-mqtt" },
+    { "id": "neopixel", "repo": "Antontek/ext-neopixel" },
+    { "id": "ultrasonic", "repo": "Antontek/ext-ultrasonic" }
+  ]
+}

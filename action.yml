@@ -1,0 +1,21 @@
+# 給擴充功能的 repo 用：每次推送都用擴充商店的檢查工具檢查（和登記、上架時的檢查一樣）
+#   - uses: actions/checkout@v5
+#   - uses: Antontek/market@main
+name: 檢查 O Bricks 擴充功能
+description: 用 O Bricks 擴充商店的檢查工具檢查擴充功能
+inputs:
+  path:
+    description: 擴充功能的資料夾（extension.json 所在的地方）
+    default: .
+runs:
+  using: composite
+  steps:
+    - uses: actions/setup-node@v5
+      with:
+        node-version: 24
+    - shell: bash
+      run: npm ci --prefix "$GITHUB_ACTION_PATH/tools" --no-audit --no-fund
+    - shell: bash
+      env:
+        EXTENSION_PATH: ${{ inputs.path }}
+      run: node "$GITHUB_ACTION_PATH/tools/obricks-market-tools.mjs" check "$EXTENSION_PATH" --market https://raw.githubusercontent.com/Antontek/market/index/index.json
