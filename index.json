@@ -1,0 +1,74 @@
+{
+  "format": 2,
+  "updatedAt": "2026-11-15T12:16:45.231Z",
+  "extensions": [
+    {
+      "id": "mqtt",
+      "name": {
+        "zh-hant": "MQTT",
+        "zh-hans": "MQTT",
+        "en": "MQTT",
+        "ja": "MQTT"
+      },
+      "description": {
+        "zh-hant": "用 WiFi 連上 MQTT broker，和儀表板或其他設備互傳資料（主題＋資料，資料是 JSON）。主機要有 WiFi（例如 Pico W、Pico 2 W）。",
+        "zh-hans": "用 WiFi 连上 MQTT broker，和仪表板或其他设备互传数据（主题＋数据，数据是 JSON）。主机要有 WiFi（例如 Pico W、Pico 2 W）。",
+        "en": "Connect to an MQTT broker over WiFi and exchange data with the dashboard or other devices (topic + JSON data). The hub needs WiFi (e.g. Pico W, Pico 2 W).",
+        "ja": "WiFi で MQTT ブローカーに接続し、ダッシュボードやほかのデバイスとデータをやり取りします（トピック＋JSON データ）。WiFi 付きのハブが必要です（Pico W、Pico 2 W など）。"
+      },
+      "author": "O Bricks",
+      "category": "communication",
+      "readme": {
+        "zh-hant": "# MQTT\n\n用 WiFi 連上 MQTT broker，和 O Bricks 網頁的儀表板、或其他設備互傳資料。資料的格式是「主題＋資料」，資料是 JSON（例如 `35`、`[0.5, -0.2]`、`\"hello\"`），和儀表板一樣。\n\n主機要有 WiFi，例如 Raspberry Pi Pico W、Pico 2 W。\n\n## 搭配儀表板\n\n1. 主機的程式：先放「**連上 WiFi**」，再放「**連上 MQTT broker**」（預設是 `broker.hivemq.com`，和儀表板的預設一樣）。\n2. 儀表板：按分頁列右邊的「**連線**」，broker 用預設的 HiveMQ，按連線。\n3. 兩邊的**前綴要一樣**（都不填也可以）。\n4. 儀表板的控制元件（搖桿、滑桿、按鈕、開關）送出的主題，主機用「**MQTT 主題 … 的數字**」、「**MQTT 主題 … 有新資料？**」讀；主機用「**MQTT 送出**」送的資料，儀表板的數值顯示、折線圖就收得到。\n\n| 儀表板元件 | 送出的資料 | 主機這樣讀 |\n|---|---|---|\n| 滑桿 | 數字，例如 `70` | MQTT 主題 robot/speed 的數字 第 1 個 |\n| 搖桿 | `[x, y]`，-1～1 | x 是第 1 個、y 是第 2 個 |\n| 按鈕 | 按下 `1`、放開 `0` | MQTT 主題 robot/stop 有新資料？ |\n| 開關 | 打開 `1`、關掉 `0` | MQTT 主題 robot/led 的數字 第 1 個 |\n\n## 積木\n\n- **連上 WiFi 名稱 … 密碼 …**：最多等 15 秒，在主控台印出 IP。\n- **連上 MQTT broker … 前綴 …**：前綴選填。斷線時會自己重連。\n- **MQTT 送出 主題 … 資料 …**：數字、文字、是／否都可以。\n- **MQTT 主題 … 有新資料？**：收到新資料時是「是」一次，放進「如果」用。\n- **MQTT 主題 … 的數字 第 … 個**：最後收到的數字；資料有好幾個數字時拿第幾個。還沒收到時是 0。\n- **MQTT 主題 … 最新的資料**：最後收到的資料（數字、文字或清單），還沒收到是 None。\n\n程式用到的函式庫（`obricks_mqtt.py`、`mqtt_simple.py`）會在執行、下載程式時自動寫到主機上專案資料夾的 `lib/`，不用自己複製。\n\n讀資料的積木每次執行時會順便處理收到的訊息，放在「重複執行」裡就好，不用另外寫收訊息的程式；第一次讀的主題會自動訂閱。\n\n## 注意\n\n- **WiFi 密碼會寫在程式裡**：分享專案或範例前記得拿掉。\n- **公開 broker 是大家共用的**：任何人都可能看到你送的資料、也可能送資料進來，不要傳敏感資料；想避免和別人的主題撞在一起，可以加前綴（例如 `myclass/team1`），儀表板也要用一樣的前綴。\n- 主機用 MQTT 的 TCP 1883 連線（儀表板在瀏覽器裡用 WebSocket），連的是同一個 broker，所以可以互傳。\n- 韌體有 `umqtt.simple` 就用韌體的；沒有的話用這個擴充附的一份（micropython-lib 的 umqtt.simple，MIT 授權）。\n",
+        "zh-hans": "# MQTT\n\n用 WiFi 连上 MQTT broker，和 O Bricks 网页的仪表板、或其他设备互传数据。数据的格式是“主题＋数据”，数据是 JSON（例如 `35`、`[0.5, -0.2]`、`\"hello\"`），和仪表板一样。\n\n主机要有 WiFi，例如 Raspberry Pi Pico W、Pico 2 W。\n\n## 搭配仪表板\n\n1. 主机的程序：先放“**连上 WiFi**”，再放“**连上 MQTT broker**”（默认是 `broker.hivemq.com`，和仪表板的默认一样）。\n2. 仪表板：按标签栏右边的“**连接**”，broker 用默认的 HiveMQ，按连接。\n3. 两边的**前缀要一样**（都不填也可以）。\n4. 仪表板的控制组件（摇杆、滑杆、按钮、开关）发送的主题，主机用“**MQTT 主题 … 的数字**”、“**MQTT 主题 … 有新数据？**”读；主机用“**MQTT 发送**”发送的数据，仪表板的数值显示、折线图就收得到。\n\n| 仪表板组件 | 发送的数据 | 主机这样读 |\n|---|---|---|\n| 滑杆 | 数字，例如 `70` | MQTT 主题 robot/speed 的数字 第 1 个 |\n| 摇杆 | `[x, y]`，-1～1 | x 是第 1 个、y 是第 2 个 |\n| 按钮 | 按下 `1`、放开 `0` | MQTT 主题 robot/stop 有新数据？ |\n| 开关 | 打开 `1`、关掉 `0` | MQTT 主题 robot/led 的数字 第 1 个 |\n\n## 积木\n\n- **连上 WiFi 名称 … 密码 …**：最多等 15 秒，在控制台打印 IP。\n- **连上 MQTT broker … 前缀 …**：前缀选填。断线时会自己重连。\n- **MQTT 发送 主题 … 数据 …**：数字、文字、是／否都可以。\n- **MQTT 主题 … 有新数据？**：收到新数据时是“是”一次，放进“如果”用。\n- **MQTT 主题 … 的数字 第 … 个**：最后收到的数字；数据有好几个数字时取第几个。还没收到时是 0。\n- **MQTT 主题 … 最新的数据**：最后收到的数据（数字、文字或列表），还没收到是 None。\n\n程序用到的库（`obricks_mqtt.py`、`mqtt_simple.py`）会在运行、下载程序时自动写到主机上项目文件夹的 `lib/`，不用自己复制。\n\n读数据的积木每次执行时会顺便处理收到的消息，放在“重复执行”里就好，不用另外写收消息的程序；第一次读的主题会自动订阅。\n\n## 注意\n\n- **WiFi 密码会写在程序里**：分享项目或示例前记得删掉。\n- **公开 broker 是大家共用的**：任何人都可能看到你发送的数据、也可能发送数据进来，不要传敏感数据；想避免和别人的主题撞在一起，可以加前缀（例如 `myclass/team1`），仪表板也要用一样的前缀。\n- 主机用 MQTT 的 TCP 1883 连接（仪表板在浏览器里用 WebSocket），连的是同一个 broker，所以可以互传。\n- 固件有 `umqtt.simple` 就用固件的；没有的话用这个扩展附的一份（micropython-lib 的 umqtt.simple，MIT 许可）。\n",
+        "en": "# MQTT\n\nConnect to an MQTT broker over WiFi and exchange data with the O Bricks dashboard or other devices. Data is \"topic + data\", where the data is JSON (for example `35`, `[0.5, -0.2]`, `\"hello\"`), the same as the dashboard.\n\nThe hub needs WiFi, for example a Raspberry Pi Pico W or Pico 2 W.\n\n## Using it with the dashboard\n\n1. In the hub program, put \"**connect to WiFi**\" first, then \"**connect to MQTT broker**\" (the default is `broker.hivemq.com`, the same as the dashboard default).\n2. On the dashboard, press \"**Connect**\" on the right of the tab bar, keep the default HiveMQ broker and connect.\n3. Both sides must use the **same prefix** (or both leave it empty).\n4. The hub reads topics sent by dashboard controls (joystick, slider, button, switch) with \"**MQTT topic … number**\" and \"**MQTT topic … has new data?**\". Data the hub sends with \"**MQTT send**\" shows up in dashboard value displays and charts.\n\n| Dashboard control | Data it sends | Read it on the hub with |\n|---|---|---|\n| Slider | A number, e.g. `70` | MQTT topic robot/speed number #1 |\n| Joystick | `[x, y]`, -1 to 1 | x is #1, y is #2 |\n| Button | `1` when pressed, `0` when released | MQTT topic robot/stop has new data? |\n| Switch | `1` on, `0` off | MQTT topic robot/led number #1 |\n\n## Blocks\n\n- **connect to WiFi name … password …**: waits up to 15 seconds and prints the IP in the console.\n- **connect to MQTT broker … prefix …**: the prefix is optional. Reconnects automatically if the connection drops.\n- **MQTT send topic … data …**: numbers, text or true/false.\n- **MQTT topic … has new data?**: true once each time new data arrives. Use it in an \"if\".\n- **MQTT topic … number #…**: the last number received; picks one when the data has several numbers. 0 until something arrives.\n- **MQTT topic … latest data**: the last data received (number, text or list), or None until something arrives.\n\nThe libraries the program uses (`obricks_mqtt.py`, `mqtt_simple.py`) are written to `lib/` in the project folder on the hub automatically when you run or download the program. You do not need to copy them yourself.\n\nThe blocks that read data also handle incoming messages each time they run, so just put them in a \"forever\" loop. There is no separate receive code to write, and a topic is subscribed automatically the first time it is read.\n\n## Notes\n\n- **The WiFi password is stored in the program**: remove it before sharing a project or sample.\n- **A public broker is shared by everyone**: anyone may see the data you send or send data in, so do not send anything sensitive. To keep your topics from clashing with other people, add a prefix (for example `myclass/team1`) and use the same prefix on the dashboard.\n- The hub connects over MQTT TCP port 1883 (the dashboard uses WebSocket in the browser). Both connect to the same broker, so they can talk to each other.\n- If the firmware has `umqtt.simple`, it is used; otherwise the copy included in this extension is used (umqtt.simple from micropython-lib, MIT license).\n",
+        "ja": "# MQTT\n\nWiFi で MQTT ブローカーに接続し、O Bricks の Web ページのダッシュボードやほかのデバイスとデータをやり取りします。データの形式は「トピック＋データ」で、データは JSON です（例：`35`、`[0.5, -0.2]`、`\"hello\"`）。ダッシュボードと同じ形式です。\n\nWiFi 付きのハブが必要です（Raspberry Pi Pico W、Pico 2 W など）。\n\n## ダッシュボードと組み合わせる\n\n1. ハブのプログラム：まず「**WiFi に接続**」、次に「**MQTT ブローカーに接続**」を置きます（既定は `broker.hivemq.com` で、ダッシュボードの既定と同じです）。\n2. ダッシュボード：タブバー右側の「**接続**」を押し、既定の HiveMQ のまま接続します。\n3. 両方の**接頭辞を同じに**します（両方とも空欄でもかまいません）。\n4. ダッシュボードの操作ウィジェット（ジョイスティック、スライダー、ボタン、スイッチ）が送るトピックは、ハブで「**MQTT トピック … の数値**」「**MQTT トピック … に新しいデータがある？**」で読みます。ハブが「**MQTT 送信**」で送ったデータは、ダッシュボードの数値表示や折れ線グラフで受け取れます。\n\n| ダッシュボードのウィジェット | 送るデータ | ハブでの読み方 |\n|---|---|---|\n| スライダー | 数値（例：`70`） | MQTT トピック robot/speed の数値 1 番目 |\n| ジョイスティック | `[x, y]`、-1～1 | x が 1 番目、y が 2 番目 |\n| ボタン | 押すと `1`、離すと `0` | MQTT トピック robot/stop に新しいデータがある？ |\n| スイッチ | オンで `1`、オフで `0` | MQTT トピック robot/led の数値 1 番目 |\n\n## ブロック\n\n- **WiFi に接続 名前 … パスワード …**：最大 15 秒待ち、IP をコンソールに表示します。\n- **MQTT ブローカーに接続 … 接頭辞 …**：接頭辞は任意です。切断されると自動で再接続します。\n- **MQTT 送信 トピック … データ …**：数値、文字、はい／いいえを送れます。\n- **MQTT トピック … に新しいデータがある？**：新しいデータが届くと 1 回だけ「はい」になります。「もし」と組み合わせて使います。\n- **MQTT トピック … の数値 … 番目**：最後に受け取った数値。データに数値が複数あるときは何番目かを選びます。まだ届いていないときは 0。\n- **MQTT トピック … の最新データ**：最後に受け取ったデータ（数値、文字、リスト）。まだ届いていないときは None。\n\nプログラムが使うライブラリ（`obricks_mqtt.py`、`mqtt_simple.py`）は、プログラムを実行・ダウンロードするときにハブのプロジェクトフォルダーの `lib/` へ自動で書き込まれます。自分でコピーする必要はありません。\n\nデータを読むブロックは実行のたびに受信したメッセージも処理するので、「ずっと繰り返す」の中に置くだけで使えます。受信用のプログラムを別に書く必要はなく、初めて読むトピックは自動で購読します。\n\n## 注意\n\n- **WiFi のパスワードはプログラムに書き込まれます**：プロジェクトやサンプルを共有する前に消してください。\n- **公開ブローカーはみんなで共有しています**：送ったデータを誰でも見られ、データを送り込むこともできるので、機密データは送らないでください。ほかの人とトピックがぶつからないように接頭辞（例：`myclass/team1`）を付け、ダッシュボードにも同じ接頭辞を設定できます。\n- ハブは MQTT の TCP 1883 で接続します（ダッシュボードはブラウザー内で WebSocket を使います）。同じブローカーに接続するので、やり取りできます。\n- ファームウェアに `umqtt.simple` があればそれを使い、なければこの拡張に同梱されたもの（micropython-lib の umqtt.simple、MIT ライセンス）を使います。\n"
+      },
+      "samples": [
+        {
+          "id": "mqtt-dashboard",
+          "name": {
+            "zh-hant": "和儀表板互傳",
+            "zh-hans": "和仪表板互传",
+            "en": "Talk to the dashboard",
+            "ja": "ダッシュボードとやり取り"
+          },
+          "desc": {
+            "zh-hant": "每秒送一個 10～100 的數字到 robot/distance（儀表板的折線圖收得到），儀表板的速度滑桿一變動就在主控台印出新的值。先把 WiFi 名稱和密碼改成你的。",
+            "zh-hans": "每秒发送一个 10～100 的数字到 robot/distance（仪表板的折线图收得到），仪表板的速度滑杆一变动就在控制台打印新的值。先把 WiFi 名称和密码改成你的。",
+            "en": "Sends a number from 10 to 100 to robot/distance every second (the dashboard chart receives it), and prints the new value in the console whenever the dashboard speed slider changes. Change the WiFi name and password to yours first.",
+            "ja": "1 秒ごとに 10～100 の数値を robot/distance に送り（ダッシュボードの折れ線グラフで受け取れます）、ダッシュボードの速度スライダーが変わるたびに新しい値をコンソールに表示します。最初に WiFi の名前とパスワードを自分のものに変えてください。"
+          },
+          "level": "basic"
+        }
+      ],
+      "icon": "packages/mqtt/icon.svg",
+      "source": {
+        "github": {
+          "repo": "Antontek/ext-mqtt"
+        }
+      },
+      "versions": [
+        {
+          "version": "1.0.1",
+          "app": ">=1.0.0",
+          "codeTypes": [
+            "micropython"
+          ],
+          "boards": [
+            "rp2040",
+            "rp2350"
+          ],
+          "lib": [
+            "mqtt_simple.py",
+            "obricks_mqtt.py"
+          ],
+          "file": "packages/mqtt/mqtt-1.0.1.zip",
+          "size": 19579,
+          "sha256": "71a0fa12b4d50e275f9ba5ff85f8e23561c59f911b28f0a022cc9337b77196f0",
+          "commit": "5950927c50b658382d134afd132ad98d6332d359"
+        }
+      ]
+    }
+  ]
+}
